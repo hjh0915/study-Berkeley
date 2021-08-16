@@ -36,6 +36,12 @@ def make_repeater(func, n):
     """
     "*** YOUR CODE HERE ***"
 
+    x = identity
+    while n > 0:
+        x = compose1(func, x)
+        n = n - 1
+    return x
+
 
 def num_eights(pos):
     """Returns the number of times 8 appears as a digit of pos.
@@ -59,6 +65,13 @@ def num_eights(pos):
     True
     """
     "*** YOUR CODE HERE ***"
+
+    if pos % 10 == 8:
+        return num_eights(pos // 10) + 1
+    elif pos < 10:
+        return 0
+    else:
+        return num_eights(pos // 10)
 
 
 def pingpong(n):
@@ -126,6 +139,12 @@ def missing_digits(n):
     """
     "*** YOUR CODE HERE ***"
 
+    if n < 10:
+        return 0
+    last, rest = n % 10, n // 10
+
+    return max(last - rest % 10 - 1, 0) + missing_digits(rest)
+
 
 def get_next_coin(coin):
     """Return the next coin. 
@@ -175,10 +194,14 @@ def one(f):
     """Church numeral 1: same as successor(zero)"""
     "*** YOUR CODE HERE ***"
 
+    return lambda x: f(x)
+
 
 def two(f):
     """Church numeral 2: same as successor(successor(zero))"""
     "*** YOUR CODE HERE ***"
+
+    return lambda x: f(f(x))
 
 
 three = successor(two)
@@ -198,6 +221,8 @@ def church_to_int(n):
     """
     "*** YOUR CODE HERE ***"
 
+    return n(lambda x: x + 1)(0)
+
 
 def add_church(m, n):
     """Return the Church numeral for m + n, for Church numerals m and n.
@@ -206,6 +231,8 @@ def add_church(m, n):
     5
     """
     "*** YOUR CODE HERE ***"
+
+    return lambda f: lambda x: m(f)(n(f)(x))
 
 
 def mul_church(m, n):
@@ -219,6 +246,8 @@ def mul_church(m, n):
     """
     "*** YOUR CODE HERE ***"
 
+    return lambda f: m(n(f))
+
 
 def pow_church(m, n):
     """Return the Church numeral m ** n, for Church numerals m and n.
@@ -229,3 +258,5 @@ def pow_church(m, n):
     9
     """
     "*** YOUR CODE HERE ***"
+
+    return n(m)
